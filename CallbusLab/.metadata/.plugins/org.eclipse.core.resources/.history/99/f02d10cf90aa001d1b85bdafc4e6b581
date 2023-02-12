@@ -1,0 +1,50 @@
+package com.spring.zaritalk.dto;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import com.spring.zaritalk.model.User;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
+public class UserDTO {
+	private long userNo;
+	private String userPw;
+	private	String nickname;
+	private String userId;
+	@Enumerated(EnumType.ORDINAL)
+	private UserAccount accountType;
+	private LocalDateTime createTime;
+	private boolean quit;
+	
+	private int postCnt;
+	
+	private List<BoardDTO> boards = new ArrayList<BoardDTO>();
+	
+	private List<HeartDTO> hearts = new ArrayList<HeartDTO>();
+	
+	public static UserDTO userEntityToDTO(User user) {
+		UserDTO userDTO = UserDTO.builder()
+								user.getUserNo()
+								user.getUserPw()
+								user.getNickname()
+								user.getUserId()
+								user.getAccountType()
+								user.getBoards()
+								user.isQuit()
+								user.getCreateTime()
+		return userDTO;
+	}
+	
+}

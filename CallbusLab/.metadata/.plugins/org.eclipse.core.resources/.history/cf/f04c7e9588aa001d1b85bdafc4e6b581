@@ -1,0 +1,29 @@
+package com.spring.zaritalk.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public enum UserAccount {
+	LESSOR(1),REALTOR(2),LESSEE(3);
+	
+	
+	
+	private int UserAccount;
+	
+	
+	UserAccount() {};
+	UserAccount(int UserAccount) {
+	      this.UserAccount = UserAccount;
+	   }
+	   
+	   public int getRankCode() {
+	      return this.rankCode;
+	   }
+
+
+}
+

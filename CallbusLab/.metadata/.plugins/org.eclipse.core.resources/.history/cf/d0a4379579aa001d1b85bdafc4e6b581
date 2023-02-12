@@ -1,0 +1,7 @@
+package com.spring.zaritalk.dto;
+
+public class CommentDTO {
+	private Long commentNo;
+	private String Content;
+	private LocalDateTime writtenDatetime;
+}

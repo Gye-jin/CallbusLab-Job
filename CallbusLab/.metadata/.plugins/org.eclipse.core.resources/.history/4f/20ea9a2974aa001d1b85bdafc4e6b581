@@ -1,0 +1,5 @@
+package com.spring.zaritalkrepository;
+
+public class UserRepository {
+
+}

@@ -1,0 +1,18 @@
+package com.spring.zaritalk.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+public enum UserAccount {
+	LESSOR(1),REALTOR(2),LESSEE(3);
+
+	UserAccount(int i) {
+		// TODO Auto-generated constructor stub
+	}
+		
+
+
+}
+

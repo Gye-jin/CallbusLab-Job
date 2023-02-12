@@ -1,0 +1,5 @@
+package com.spring.zaritalk.dto;
+
+public enum UserAccount {
+	LESSOR,REALTOR,LESSEE
+}

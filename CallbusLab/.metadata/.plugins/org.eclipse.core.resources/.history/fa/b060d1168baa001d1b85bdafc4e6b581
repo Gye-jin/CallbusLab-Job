@@ -1,0 +1,15 @@
+package com.spring.zaritalk.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+public enum UserAccount {
+	LESSOR(1),REALTOR(2),LESSEE(3);
+	
+	private int userAccount;
+
+	UserAccount(int userAccount){
+		this.userAccount = userAccount;
+	}
+}
+

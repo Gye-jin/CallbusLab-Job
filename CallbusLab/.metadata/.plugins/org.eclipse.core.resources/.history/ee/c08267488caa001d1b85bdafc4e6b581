@@ -1,0 +1,12 @@
+package com.spring.zaritalk.dto;
+
+public enum UserAccount {
+	LESSOR,REALTOR,LESSEE;
+	
+//	private int userAccount;
+//
+//	UserAccount(int userAccount){
+//		this.userAccount = userAccount;
+//	}
+}
+

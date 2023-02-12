@@ -1,0 +1,18 @@
+package com.spring.zaritalk.model;
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString(exclude = {"boards", "comments"})
+@Builder
+public class User {
+	
+	@Id
+	@Column(name = "user_id")
+	private long Id;
+	private String userPw;
+	private	String nickname;
+	private String userId;
+	private boolean quit;
+}

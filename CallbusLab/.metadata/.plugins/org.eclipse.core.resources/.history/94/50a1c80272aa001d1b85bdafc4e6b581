@@ -1,0 +1,5 @@
+package com.spring.zaritalk.model;
+
+public class Board {
+
+}
