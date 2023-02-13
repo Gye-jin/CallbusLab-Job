@@ -15,20 +15,21 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CommentDTO {
 	private Long commentNo;
-	private String Content;
+	private String commentContent;
 	private LocalDateTime writtenDatetime;
 	private LocalDateTime modifiedDatetime;
-	
-	private BoardDTO board;
-	private UserDTO user;
+	private Long boardNo;
+	private String userId;
 	
 	
 	public static CommentDTO EntityToDTO(Comment comment) {
 		CommentDTO commentDTO = CommentDTO.builder()
 										  .commentNo(comment.getCommentNo())
-										  .Content(comment.getContent())
+										  .commentContent(comment.getCommentContent())
 										  .writtenDatetime(comment.getWrittenDatetime())
 										  .modifiedDatetime(comment.getModifiedDatetime())
+										  .boardNo(comment.getBoard().getBoardNo())
+										  .userId(comment.getUser().getAccountId())
 										  .build();
 				return commentDTO;
 	}

@@ -7,7 +7,6 @@ public interface BoardService {
 	
 	public void BoardWrite(BoardDTO boardDTO, User user);
 	
-	
 	public BoardDTO BoardRead(Long id);
 	
 	public int updateBoard(BoardDTO boardDTO, Long boardNo, User loginUser);

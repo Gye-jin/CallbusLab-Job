@@ -35,8 +35,8 @@ public class UserController {
 	@GetMapping("/api/logout")
 	public ResponseEntity<?> logout(HttpServletRequest request){
 		HttpSession session = request.getSession();
-//		User loginUser = (User) session.getAttribute("loginUser");
 		session.invalidate();
+		System.out.println("logout");
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}
 	

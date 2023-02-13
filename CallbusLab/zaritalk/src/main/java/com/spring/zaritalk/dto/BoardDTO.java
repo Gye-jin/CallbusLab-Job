@@ -3,9 +3,9 @@ package com.spring.zaritalk.dto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.spring.zaritalk.model.Board;
-import com.spring.zaritalk.model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,7 @@ public class BoardDTO {
 	private String boardContent;
 	private LocalDateTime writtenDatetime;
 	private LocalDateTime modifiedDatetime;
-	private User user;
+	private UserDTO user;
 	private List<CommentDTO> comments = new ArrayList<>();
 	private List<HeartDTO> hearts = new ArrayList<>();
 	
@@ -34,6 +34,10 @@ public class BoardDTO {
 				.boardContent(board.getBoardContent())
 				.writtenDatetime(board.getWrittenDatetime())
 				.modifiedDatetime(board.getModifiedDatetime())
+				.user(UserDTO.EntityToDTO(board.getUser()))
+				.comments(board.getComments().stream()
+						.map(comment -> CommentDTO.EntityToDTO(comment))
+						.collect(Collectors.toList()))
 				.build();
 		return boardDTO;
 	}

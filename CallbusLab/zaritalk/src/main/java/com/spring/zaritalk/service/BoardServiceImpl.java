@@ -22,14 +22,15 @@ public class BoardServiceImpl implements BoardService{
 	@Transactional
 	@Override
 	public void BoardWrite(BoardDTO boardDTO, User loginUser) {
-		boardDTO.setUser(loginUser);
-		Board boardEntity = Board.DTOToEntity(boardDTO);
 		
+		Board boardEntity = Board.DTOToEntity(boardDTO);
+		boardEntity.updateUser(loginUser);
 		boardRepository.save(boardEntity);	
 	}
 	
 	@Override
 	public BoardDTO BoardRead(Long boardNo) {
+
 		Board board = boardRepository.findById(boardNo).orElseThrow(()-> new IllegalArgumentException());
 		BoardDTO boardDTO = BoardDTO.EntityToDTO(board);
 		System.out.println(boardDTO);

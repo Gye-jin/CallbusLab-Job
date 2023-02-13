@@ -5,12 +5,8 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.spring.zaritalk.model.User;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 public class LoginUser implements UserDetails{
 	

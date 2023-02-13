@@ -27,11 +27,12 @@ public class CommentController {
 	CommentServiceImpl commentService;
 	
 	@PostMapping("/comment")
-	public ResponseEntity<?> commentWrite(HttpServletRequest request, @RequestBody CommentDTO commentDTO){
+	public ResponseEntity<?> commentWrite(@RequestBody CommentDTO commentDTO,HttpServletRequest request){
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
+		System.out.println(commentDTO.getCommentContent());
 		commentService.CommentWrite(commentDTO, loginUser);
-		
+		System.out.println(commentDTO.getCommentContent());
 		return new ResponseEntity<String>("ok",HttpStatus.CREATED);
 	}
 	

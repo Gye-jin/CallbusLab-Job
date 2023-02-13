@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
+
 public class UserDTO {
 	private long userId;
 	private String userPw;
@@ -34,9 +35,9 @@ public class UserDTO {
 	
 	private boolean quit;
 	
-	private List<BoardDTO> boards = new ArrayList<BoardDTO>();
-	private List<HeartDTO> hearts = new ArrayList<HeartDTO>();
-	private List<CommentDTO> comments = new ArrayList<CommentDTO>();
+//	private List<BoardDTO> boards = new ArrayList<BoardDTO>();
+//	private List<HeartDTO> hearts = new ArrayList<HeartDTO>();
+//	private List<CommentDTO> comments = new ArrayList<CommentDTO>();
 	
 	public static UserDTO EntityToDTO(User user) {
 		UserDTO userDTO = UserDTO.builder()

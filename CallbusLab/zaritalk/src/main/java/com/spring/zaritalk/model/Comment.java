@@ -18,7 +18,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.zaritalk.dto.CommentDTO;
-import com.spring.zaritalk.dto.HeartDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,8 +35,8 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long commentNo;
 	
-	@Column(updatable = false,nullable = false)
-	private String Content;
+	@Column(nullable = false)
+	private String commentContent;
 	
 	@CreatedDate
 	@Column(updatable = false,nullable = false)
@@ -65,7 +64,7 @@ public class Comment {
 	public static Comment DTOToEntity(CommentDTO commentDTO) {
 		Comment comment = Comment.builder()
 								 .commentNo(commentDTO.getCommentNo())
-								 .Content(commentDTO.getContent())
+								 .commentContent(commentDTO.getCommentContent())
 								 .writtenDatetime(commentDTO.getWrittenDatetime())
 								 .modifiedDatetime(commentDTO.getModifiedDatetime())
 								 .build();
@@ -81,7 +80,7 @@ public class Comment {
 	}
 	
 	public void updateContent(String Content) {
-		this.Content = Content;
+		this.commentContent = Content;
 	}
 	
 
