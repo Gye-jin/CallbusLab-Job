@@ -1,5 +1,7 @@
 package com.spring.zaritalk.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,16 +30,11 @@ public class UserServiceImpl implements UserService{
 		return true;
 	}
 	
-	public boolean login(UserDTO userDTO) {
-		User userEntity = User.DTOToEntity(userDTO);
-		userEntity.passwordEncoding(userEntity.getUserPw());
-		Boolean result = userRepository.existsByUserIdAndUserPw(userEntity.getUserId(), userEntity.getUserPw());
-
-		if (result)
-			return true;
-
-		else
-			return false;
+	@Override
+	@Transactional
+	public void withdrawUser(User user) {
+		User userEntity = userRepository.findById(user.getUserId()).orElseThrow(()-> new IllegalArgumentException());
+		userEntity.withDrawUser(true);
 	}
 	
 }

@@ -16,6 +16,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.spring.zaritalk.dto.CommentDTO;
+import com.spring.zaritalk.dto.HeartDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,11 +52,37 @@ public class Comment {
 	// [Board Join]
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "board_no",nullable = false)
+	@JsonIgnore
 	private Board board;
 	
 	// [User Join]
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id",nullable = false)
+	@JsonIgnore
 	private User user;
+	
+	
+	public static Comment DTOToEntity(CommentDTO commentDTO) {
+		Comment comment = Comment.builder()
+								 .commentNo(commentDTO.getCommentNo())
+								 .Content(commentDTO.getContent())
+								 .writtenDatetime(commentDTO.getWrittenDatetime())
+								 .modifiedDatetime(commentDTO.getModifiedDatetime())
+								 .build();
+		return comment;
+	}
+	
+	public void updateUser(User user) {
+		this.user = user;
+	}
+	
+	public void updateBoard(Board board) {
+		this.board = board;
+	}
+	
+	public void updateContent(String Content) {
+		this.Content = Content;
+	}
+	
 
 }

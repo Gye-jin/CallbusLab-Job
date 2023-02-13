@@ -8,11 +8,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
-import com.spring.zaritalk.config.jwt.CustomAuthenticationEntryPoint;
-import com.spring.zaritalk.config.jwt.JwtRequestFilter;
+import com.spring.zaritalk.config.jwt.JwtAuthenticationFilter;
+import com.spring.zaritalk.config.jwt.JwtAuthrizationFilter;
+import com.spring.zaritalk.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private final CorsFilter corsfilter;
+	private final UserRepository userrepository;
 	
 	@Bean
 	public BCryptPasswordEncoder encodePwd() {
@@ -33,30 +34,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests()
-		.antMatchers("/api/join","/api/login").permitAll()
-		.anyRequest().authenticated()
-		.and()
-		.formLogin()
-		.permitAll()
-		.and()
-		.logout()
-		.permitAll()
-		.and()
-		.exceptionHandling()
-		.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
-	
-		http.httpBasic().disable()
-		.formLogin().disable()
-		.addFilter(corsfilter);	// 기존의 crossorigin(인증 x), 시큐리티 필터에 등록 인증(o)
-	
+		.antMatchers("/login","/join").permitAll()
+		.antMatchers("/api/**").authenticated();
+		
 		http.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.maximumSessions(1)
-		.expiredUrl("/login?expire=true");
-		
-		 http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
-		
-		
+		.and()
+		.addFilter(new JwtAuthenticationFilter(authenticationManager()))	//authenticationManager
+		.addFilter(new JwtAuthrizationFilter(authenticationManager(),userrepository))	//authenticationManager
+		.formLogin().disable();
+	    http.httpBasic().disable()
+		.addFilter(corsfilter);	// 기존의 crossorigin(인증 x), 시큐리티 필터에 등록 인증(o)
+			
 	}
 	
 	

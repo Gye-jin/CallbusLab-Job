@@ -7,7 +7,9 @@ import com.spring.zaritalk.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
-//	public User findbyUserId(String userId);
 	
-	public boolean existsByUserIdAndUserPw(String userId, String userPw);
+	
+	public User findByAccountId(String accountId);
+	
+	public boolean existsByAccountIdAndUserPw(String accountId, String userPw);
 }

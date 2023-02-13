@@ -22,30 +22,33 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.zaritalk.dto.UserAccount;
 import com.spring.zaritalk.dto.UserDTO;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)	
 @Getter
+@ToString(exclude = {"boards", "comments"})
 @Builder
 public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long userNo;
+	private long userId;
 	@Column(nullable = false)
 	private String userPw;
 	
 	@Column(nullable = false)
-	private	String nickname;
+	private	String nickName;
 	
 	@Column(nullable = false, unique = true)
-	private String userId;
+	private String accountId;
 	
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
@@ -63,20 +66,23 @@ public class User {
 	private List<Board> boards = new ArrayList<Board>();
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	@JsonIgnore
 	private List<Heart> hearts = new ArrayList<Heart>();
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	@JsonIgnore
+	private List<Comment> comments = new ArrayList<Comment>();
 	
 	
 	public static User DTOToEntity(UserDTO userDTO) {
 		User user = User.builder()
-				.userNo(userDTO.getUserNo())
-				.userPw(userDTO.getUserPw())
 				.userId(userDTO.getUserId())
-				.nickname(userDTO.getNickname())
+				.userPw(userDTO.getUserPw())
+				.accountId(userDTO.getAccountId())
+				.nickName(userDTO.getNickName())
 				.accountType(userDTO.getAccountType())
 				.createTime(userDTO.getCreateTime())
 				.quit(userDTO.isQuit())
-				.boards(userDTO.getBoards())
-				.hearts(userDTO.getHearts())
 				.build();
 		return user;
 	}
@@ -84,4 +90,9 @@ public class User {
 	public String passwordEncoding(String password) {
 		return this.userPw = password;
 	}
+	
+	public boolean withDrawUser(boolean quit) {
+		return this.quit = quit;
+	}
+	
 }

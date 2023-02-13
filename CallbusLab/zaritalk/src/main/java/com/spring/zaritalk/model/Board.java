@@ -21,16 +21,19 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.spring.zaritalk.dto.BoardDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@ToString(exclude = {"comments", "hearts"})
 @EntityListeners(AuditingEntityListener.class)	
 @Builder
 public class Board {
@@ -40,6 +43,9 @@ public class Board {
 	private Long boardNo;
 	
 	@Column(nullable = false)
+	private String boardTitle;
+	
+	@Column(nullable = false,length = 1000000)
 	private String boardContent;
 	
 	@CreatedDate
@@ -50,20 +56,46 @@ public class Board {
 	@Column(nullable = false)
 	private LocalDateTime modifiedDatetime;
 	
+	
+	
 	// [User Join]
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id",nullable = false)
 	private User user;
 	
 	// [Heart Join]
+	@OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@JsonIgnore
-	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Heart> hearts = new ArrayList<Heart>();
 	
 //	// [Comment Join]
+	@OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
 	@JsonIgnore
-	@OneToMany(mappedBy = "board")
 	private List<Comment> comments = new ArrayList<Comment>();
+	
+	
+	public static Board DTOToEntity(BoardDTO boardDTO) {
+		Board board = Board.builder()
+				.boardNo(boardDTO.getBoardNo())
+				.boardTitle(boardDTO.getBoardTitle())
+				.boardContent(boardDTO.getBoardContent())
+				.writtenDatetime(boardDTO.getWrittenDatetime())
+				.modifiedDatetime(boardDTO.getModifiedDatetime())
+				.build();
+		
+		return board;
+	}
+	
+	
+	public void updateUser(User user) {
+		this.user = user;
+	}
+	public void updateTitle(String boardtitle) {
+		this.boardTitle = boardtitle;
+	}
+	public void updateContent(String boardcontent) {
+		this.boardContent = boardcontent;
+	}
 	
 	
 

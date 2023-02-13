@@ -1,6 +1,5 @@
 package com.spring.zaritalk.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -13,6 +12,7 @@ import javax.persistence.ManyToOne;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.spring.zaritalk.dto.HeartDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,19 +36,37 @@ public class Heart {
 	
 	// Join----------------------------------------
 	
-	@ManyToOne(fetch = FetchType.LAZY )
-	@JoinColumn(name = "user_id",nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY,optional = false)
+	@JoinColumn(name = "user_no",nullable = false)
 	@JsonIgnore
 	private User user;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,optional = false)
 	@JoinColumn(name = "board_no",nullable = false)
 	@JsonIgnore
 	private Board board;
 	
+	public static Heart DTOToEntity(HeartDTO heartDTO) {
+		Heart heart = Heart.builder()
+				.heartNo(heartDTO.getHeartNo())
+				.doHeart(heartDTO.isDoHeart())
+				.build();
+		return heart;
+	}
 	
-	public void updateLike(Boolean doheart) {
+	
+	public void updateUser(User user) {
+		this.user = user;
+	}
+	
+	public void updateBoard(Board board) {
+		this.board = board;
+	}
+	
+	public void updateDoheart(Boolean doheart) {
 		this.doHeart = doheart;
 	}
+	
+	
 	
 }

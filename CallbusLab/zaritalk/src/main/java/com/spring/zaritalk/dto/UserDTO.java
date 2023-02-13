@@ -10,8 +10,6 @@ import javax.persistence.Enumerated;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.spring.zaritalk.model.Board;
-import com.spring.zaritalk.model.Heart;
 import com.spring.zaritalk.model.User;
 
 import lombok.AllArgsConstructor;
@@ -24,10 +22,10 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class UserDTO {
-	private long userNo;
+	private long userId;
 	private String userPw;
-	private	String nickname;
-	private String userId;
+	private	String nickName;
+	private String accountId;
 	
 	@Enumerated(EnumType.ORDINAL)
 	private UserAccount accountType;
@@ -36,20 +34,19 @@ public class UserDTO {
 	
 	private boolean quit;
 	
-	private List<Board> boards = new ArrayList<Board>();
-	private List<Heart> hearts = new ArrayList<Heart>();
+	private List<BoardDTO> boards = new ArrayList<BoardDTO>();
+	private List<HeartDTO> hearts = new ArrayList<HeartDTO>();
+	private List<CommentDTO> comments = new ArrayList<CommentDTO>();
 	
 	public static UserDTO EntityToDTO(User user) {
 		UserDTO userDTO = UserDTO.builder()
-				.userNo(user.getUserNo())
-				.userPw(user.getUserPw())
-				.nickname(user.getNickname())
 				.userId(user.getUserId())
+				.userPw(user.getUserPw())
+				.nickName(user.getNickName())
+				.accountId(user.getAccountId())
 				.accountType(user.getAccountType())
 				.createTime(user.getCreateTime())
 				.quit(user.isQuit())
-				.boards(user.getBoards())
-				.hearts(user.getHearts())
 				.build();							
 		return userDTO;
 	}

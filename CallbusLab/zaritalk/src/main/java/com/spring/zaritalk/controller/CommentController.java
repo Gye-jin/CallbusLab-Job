@@ -15,37 +15,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spring.zaritalk.dto.BoardDTO;
+import com.spring.zaritalk.dto.CommentDTO;
 import com.spring.zaritalk.model.User;
-import com.spring.zaritalk.service.BoardServiceImpl;
+import com.spring.zaritalk.service.CommentServiceImpl;
 
 @RestController
 @RequestMapping(value = "/api",produces = "application/json")
-public class BoardController {
+public class CommentController {
 	
 	@Autowired
-	BoardServiceImpl boardService;	
+	CommentServiceImpl commentService;
 	
-	@PostMapping("/board")
-	public ResponseEntity<?> boardWrite(HttpServletRequest request,@RequestBody BoardDTO boardDTO){
+	@PostMapping("/comment")
+	public ResponseEntity<?> commentWrite(HttpServletRequest request, @RequestBody CommentDTO commentDTO){
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
-		boardService.BoardWrite(boardDTO,loginUser);
+		commentService.CommentWrite(commentDTO, loginUser);
+		
 		return new ResponseEntity<String>("ok",HttpStatus.CREATED);
 	}
 	
 	// get진행이 안됨.(확인 필요)
-	@GetMapping("/board/{no}")
-	public ResponseEntity<?> boardRead(@PathVariable Long no){
-		return new ResponseEntity<BoardDTO>(boardService.BoardRead(no),HttpStatus.OK);
+	@GetMapping("/comment/{no}")
+	public ResponseEntity<?> commentRead(@PathVariable Long no){
+		return new ResponseEntity<CommentDTO>(commentService.CommentRead(no),HttpStatus.OK);
 	}
 	
-	
-	@PutMapping("/board/{no}")
-	public  ResponseEntity<?> boardUpdate(@RequestBody BoardDTO boardDTO, @PathVariable Long no,HttpServletRequest request){
+	@PutMapping("/comment/{no}")
+	public  ResponseEntity<?> commentUpdate(@RequestBody CommentDTO commentDTO, @PathVariable Long no,HttpServletRequest request){
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
-		int result = boardService.updateBoard(boardDTO, no, loginUser);
+		int result = commentService.updateComment(commentDTO, no, loginUser);
 		if(result == 1) {
 			return new ResponseEntity<String>("ok", HttpStatus.OK);
 		}else {
@@ -53,17 +53,16 @@ public class BoardController {
 		}
 	}
 	
-	@DeleteMapping("/board/{no}")
-	public ResponseEntity<?> boardDelete(@PathVariable Long no,HttpServletRequest request){
+	@DeleteMapping("/comment/{no}")
+	public ResponseEntity<?> commentDelete(@PathVariable Long no,HttpServletRequest request){
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
-		int result = boardService.deleteBoard(no,loginUser);
-		
+		int result = commentService.deleteComment(no,loginUser);
 		if(result == 1) {
 			return new ResponseEntity<String>("ok", HttpStatus.OK);
 		}else {
 			return new ResponseEntity<String>("fail", HttpStatus.FORBIDDEN);
 		}
 	}
-
+	
 }

@@ -1,6 +1,0 @@
-package com.spring.zaritalk.service;
-
-public interface UserService {
-	
-	public
-}

@@ -1,5 +1,6 @@
 package com.spring.zaritalk.dto;
 
+import com.spring.zaritalk.model.Board;
 import com.spring.zaritalk.model.Heart;
 import com.spring.zaritalk.model.User;
 
@@ -16,6 +17,15 @@ public class HeartDTO {
 	private Long heartNo;
 	private boolean doHeart;
 	private User user;
-	private Heart heart;
+	private Board board;
+	
+	
+	public static HeartDTO EntityToDTO(Heart heart) {
+		HeartDTO heartDTO = HeartDTO.builder()
+				.heartNo(heart.getHeartNo())
+				.doHeart(heart.isDoHeart())
+				.build();
+		return heartDTO;
+	}
 
 }
