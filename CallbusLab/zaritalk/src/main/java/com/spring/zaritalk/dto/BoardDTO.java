@@ -22,6 +22,8 @@ public class BoardDTO {
 	private String boardContent;
 	private LocalDateTime writtenDatetime;
 	private LocalDateTime modifiedDatetime;
+	private Long heartCnt;
+	
 	private UserDTO user;
 	private List<CommentDTO> comments = new ArrayList<>();
 	private List<HeartDTO> hearts = new ArrayList<>();
@@ -35,8 +37,12 @@ public class BoardDTO {
 				.writtenDatetime(board.getWrittenDatetime())
 				.modifiedDatetime(board.getModifiedDatetime())
 				.user(UserDTO.EntityToDTO(board.getUser()))
+				.heartCnt(board.getHeartCnt())
 				.comments(board.getComments().stream()
 						.map(comment -> CommentDTO.EntityToDTO(comment))
+						.collect(Collectors.toList()))
+				.hearts(board.getHearts().stream()
+						.map(heart -> HeartDTO.EntityToDTO(heart))
 						.collect(Collectors.toList()))
 				.build();
 		return boardDTO;

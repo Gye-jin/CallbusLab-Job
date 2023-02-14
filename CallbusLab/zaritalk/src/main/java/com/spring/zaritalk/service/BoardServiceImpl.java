@@ -26,6 +26,7 @@ public class BoardServiceImpl implements BoardService{
 	public void BoardWrite(BoardDTO boardDTO, User loginUser) {
 		
 		Board boardEntity = Board.DTOToEntity(boardDTO);
+		boardEntity.setHeart();
 		boardEntity.updateUser(loginUser);
 		boardRepository.save(boardEntity);	
 	}
@@ -66,5 +67,7 @@ public class BoardServiceImpl implements BoardService{
 			return 0;
 		}
 	}
+	
+	
 	
 }

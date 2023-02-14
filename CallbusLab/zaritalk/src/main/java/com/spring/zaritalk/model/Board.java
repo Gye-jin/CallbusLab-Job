@@ -28,6 +28,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import net.bytebuddy.asm.Advice.This;
 
 @Entity
 @AllArgsConstructor
@@ -56,7 +57,7 @@ public class Board {
 	@Column(nullable = false)
 	private LocalDateTime modifiedDatetime;
 	
-	
+	private Long heartCnt;
 	
 	// [User Join]
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -80,6 +81,7 @@ public class Board {
 				.boardTitle(boardDTO.getBoardTitle())
 				.boardContent(boardDTO.getBoardContent())
 				.writtenDatetime(boardDTO.getWrittenDatetime())
+				.heartCnt(boardDTO.getHeartCnt())
 				.modifiedDatetime(boardDTO.getModifiedDatetime())
 				.build();
 		
@@ -97,6 +99,16 @@ public class Board {
 		this.boardContent = boardcontent;
 	}
 	
+	public void plusHeartCnt() {
+		this.heartCnt+=1;
+	}
 	
+	public void minusHeartCnt() {
+		this.heartCnt-=1;
+	}
+	
+	public void setHeart() {
+		this.heartCnt=0L;
+	}
 
 }

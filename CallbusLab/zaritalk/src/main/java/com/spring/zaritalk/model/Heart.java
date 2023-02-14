@@ -46,15 +46,6 @@ public class Heart {
 	@JsonIgnore
 	private Board board;
 	
-	public static Heart DTOToEntity(HeartDTO heartDTO) {
-		Heart heart = Heart.builder()
-				.heartNo(heartDTO.getHeartNo())
-				.doHeart(heartDTO.isDoHeart())
-				.build();
-		return heart;
-	}
-	
-	
 	public void updateUser(User user) {
 		this.user = user;
 	}
