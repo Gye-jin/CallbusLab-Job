@@ -41,12 +41,16 @@ public class HeartServiceImpl implements HeartService{
 			boardEntity.plusHeartCnt();
 		} else {
 			Heart heart = heartEntity.orElseGet(Heart::new);
-			if (heart.isDoHeart()) {
-				heart.updateDoheart(false);
-				boardEntity.minusHeartCnt();
-			} else {
-				heart.updateDoheart(true);
+			if (doheart) {
+				heart.updateDoheart(doheart);
+				System.out.println("+");
 				boardEntity.plusHeartCnt();
+				System.out.println(boardEntity.getHeartCnt());
+			} else {
+				heart.updateDoheart(doheart);
+				System.out.println("-");
+				boardEntity.minusHeartCnt();
+				System.out.println(boardEntity.getHeartCnt());
 			}
 
 		}

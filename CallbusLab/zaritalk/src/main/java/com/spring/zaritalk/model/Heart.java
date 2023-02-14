@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.spring.zaritalk.dto.HeartDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

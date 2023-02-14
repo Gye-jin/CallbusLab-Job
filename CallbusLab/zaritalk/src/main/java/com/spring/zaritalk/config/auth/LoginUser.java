@@ -40,6 +40,7 @@ public class LoginUser implements UserDetails{
 	public String getUsername() {
 		return user.getAccountId();
 	}
+	
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -62,7 +63,9 @@ public class LoginUser implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return true;
+		return !user.isQuit();
 	}
+	
+
 
 }

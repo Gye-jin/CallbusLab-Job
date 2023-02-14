@@ -1,14 +1,9 @@
 package com.spring.zaritalk.dto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.spring.zaritalk.model.User;
 

@@ -32,9 +32,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
-	
-	@Autowired
-	UserRepository userRepository;
 
 	// /login 요청을 하면 로그인 시도를 위해서 실행되는 함수
 	@Override
@@ -50,17 +47,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			System.out.println("*******");
 			User user;
 			user = om.readValue(request.getInputStream(), User.class);
-
+			
 			System.out.println(user.getAccountId() + "id");
 			System.out.println(user.getNickName() + "nickname");
 			System.out.println(user.getUserPw() + "pw");
-
+					
+			System.out.println(user);
 			UsernamePasswordAuthenticationToken tuthenticationToken = new UsernamePasswordAuthenticationToken(
 					user.getAccountId(), user.getUserPw());
 			Authentication authentication = authenticationManager.authenticate(tuthenticationToken);
 			// authentication 객체가 session 영역에 저장됨 => 로그인이 되었다는 뜻임.
-
 			LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+			System.out.println();
 			System.out.println("로그인완료" + loginUser.getUsername());
 			return authentication;
 			
@@ -87,5 +85,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		System.out.println(jwtToken);
 		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
 	}
+	
+
+
 
 }

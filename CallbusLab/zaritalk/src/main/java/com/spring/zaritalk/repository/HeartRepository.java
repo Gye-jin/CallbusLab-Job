@@ -12,8 +12,6 @@ import com.spring.zaritalk.model.User;
 @Repository
 public interface HeartRepository extends JpaRepository<Heart, Long>{
 	
-	
-	
 	public Optional<Heart> findByBoardAndUser(Board board, User user);
 
 	public Long countByBoard(Board board);

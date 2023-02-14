@@ -20,7 +20,7 @@ public class ApiControllerExceptionHandler {
 	                .status(e.getErrorCode().getStatus().value())
 	                .body(new ErrorResponse(e.getErrorCode()));
 	    }
-
+	 
 	    /*
 	     * HTTP 405 Exception
 	     */

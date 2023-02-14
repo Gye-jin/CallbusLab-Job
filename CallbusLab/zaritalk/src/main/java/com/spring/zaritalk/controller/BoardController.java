@@ -20,13 +20,13 @@ import com.spring.zaritalk.model.User;
 import com.spring.zaritalk.service.BoardServiceImpl;
 
 @RestController
-@RequestMapping(value = "/api",produces = "application/json")
+@RequestMapping(produces = "application/json")
 public class BoardController {
 	
 	@Autowired
 	BoardServiceImpl boardService;	
 	
-	@PostMapping("/board")
+	@PostMapping("/api/board")
 	public ResponseEntity<?> boardWrite(HttpServletRequest request,@RequestBody BoardDTO boardDTO){
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
@@ -34,14 +34,13 @@ public class BoardController {
 		return new ResponseEntity<String>("ok",HttpStatus.CREATED);
 	}
 	
-	// get진행이 안됨.(확인 필요)
 	@GetMapping("/board/{no}")
 	public ResponseEntity<?> boardRead(@PathVariable Long no) {
 		return new ResponseEntity<BoardDTO>(boardService.BoardRead(no),HttpStatus.OK);
 	}
 	
 	
-	@PutMapping("/board/{no}")
+	@PutMapping("/api/board/{no}")
 	public  ResponseEntity<?> boardUpdate(@RequestBody BoardDTO boardDTO, @PathVariable Long no,HttpServletRequest request){
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
@@ -53,7 +52,7 @@ public class BoardController {
 		}
 	}
 	
-	@DeleteMapping("/board/{no}")
+	@DeleteMapping("/api/board/{no}")
 	public ResponseEntity<?> boardDelete(@PathVariable Long no,HttpServletRequest request){
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
