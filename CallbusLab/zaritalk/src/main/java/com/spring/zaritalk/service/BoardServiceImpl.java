@@ -1,11 +1,17 @@
 package com.spring.zaritalk.service;
 
+import java.util.function.Function;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.spring.zaritalk.common.ErrorCode;
+import com.spring.zaritalk.common.PageRequestDTO;
+import com.spring.zaritalk.common.PageResultDTO;
 import com.spring.zaritalk.common.exception.ApiControllerException;
 import com.spring.zaritalk.dto.BoardDTO;
 import com.spring.zaritalk.model.Board;
@@ -20,6 +26,17 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Autowired
 	BoardRepository boardRepository;
+	
+	@Override
+	public PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO) {
+		Pageable pageable = requestDTO.getPageable();
+		Page<Board> result = boardRepository.findAll(pageable);
+		
+		Function<Board, BoardDTO> fn = (board -> BoardDTO.EntityToDTO(board));
+		
+		return new PageResultDTO<BoardDTO, Board>(result, fn);
+	}
+	
 	
 	@Transactional
 	@Override

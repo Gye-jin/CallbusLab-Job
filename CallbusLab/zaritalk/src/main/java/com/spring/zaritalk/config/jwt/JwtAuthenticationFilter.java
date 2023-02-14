@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.zaritalk.config.JwtProperties;
 import com.spring.zaritalk.config.auth.LoginUser;
 import com.spring.zaritalk.model.User;
-import com.spring.zaritalk.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.spring.zaritalk.common.UserAccount;
 import com.spring.zaritalk.model.User;
 
 import lombok.AllArgsConstructor;

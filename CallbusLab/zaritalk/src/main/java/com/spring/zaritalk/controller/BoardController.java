@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.zaritalk.common.PageRequestDTO;
+import com.spring.zaritalk.common.PageResultDTO;
 import com.spring.zaritalk.dto.BoardDTO;
 import com.spring.zaritalk.model.User;
 import com.spring.zaritalk.service.BoardServiceImpl;
@@ -25,6 +27,12 @@ public class BoardController {
 	
 	@Autowired
 	BoardServiceImpl boardService;	
+	
+	@GetMapping("/page/{pageNo}/{size}")
+	public ResponseEntity<?> boardPage(@PathVariable int pageNo, @PathVariable int size) {
+		PageRequestDTO requestDTO = PageRequestDTO.builder().page(pageNo).size(size).build();
+		return new ResponseEntity<PageResultDTO>(boardService.getList(requestDTO), HttpStatus.OK);
+	}
 	
 	@PostMapping("/api/board")
 	public ResponseEntity<?> boardWrite(HttpServletRequest request,@RequestBody BoardDTO boardDTO){

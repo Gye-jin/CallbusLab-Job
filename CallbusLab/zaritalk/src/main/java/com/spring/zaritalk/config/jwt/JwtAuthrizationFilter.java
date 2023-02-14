@@ -55,8 +55,8 @@ public class JwtAuthrizationFilter extends BasicAuthenticationFilter{
 
 			String accountId = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwttoken)
 					.getClaim("AccountId").asString();
-			String Authentication = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwttoken)
-					.getClaim("Authentication").asString();
+//			String Authentication = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwttoken)
+//					.getClaim("Authentication").asString();
 
 			if (accountId != null) {
 				User userEentity = userRepository.findByAccountId(accountId);
