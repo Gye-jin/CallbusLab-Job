@@ -60,7 +60,7 @@ public class Board {
 	
 	// [User Join]
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id",nullable = false)
+	@JoinColumn(name = "user_no",nullable = false)
 	private User user;
 	
 	// [Heart Join]

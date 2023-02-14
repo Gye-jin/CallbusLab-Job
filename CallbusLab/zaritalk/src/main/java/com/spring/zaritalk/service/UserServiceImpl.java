@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	@Transactional
 	public void withdrawUser(User user) {
-		User userEntity = userRepository.findById(user.getUserId()).orElseThrow(()-> new IllegalArgumentException());
+		User userEntity = userRepository.findById(user.getUserNo()).orElseThrow(()-> new IllegalArgumentException());
 		userEntity.withDrawUser(true);
 	}
 	

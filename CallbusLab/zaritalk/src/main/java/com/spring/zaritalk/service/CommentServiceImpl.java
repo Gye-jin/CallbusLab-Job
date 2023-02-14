@@ -5,6 +5,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.zaritalk.common.ErrorCode;
+import com.spring.zaritalk.common.exception.ApiControllerException;
 import com.spring.zaritalk.dto.CommentDTO;
 import com.spring.zaritalk.model.Board;
 import com.spring.zaritalk.model.Comment;
@@ -32,7 +34,7 @@ public class CommentServiceImpl implements CommentService{
 			
 		System.out.println(commentDTO.getBoardNo());
 		Comment comment = Comment.DTOToEntity(commentDTO);
-		Board boardEntity = boardRepository.findById(commentDTO.getBoardNo()).orElseThrow(()-> new IllegalArgumentException());
+		Board boardEntity = boardRepository.findById(commentDTO.getBoardNo()).orElseThrow(()-> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
 		comment.updateBoard(boardEntity);
 		comment.updateUser(loginUser);
 		commentRepository.save(comment);
@@ -40,14 +42,14 @@ public class CommentServiceImpl implements CommentService{
 	
 	@Override
 	public CommentDTO CommentRead(Long commentNo) {
-		Comment comment = commentRepository.findById(commentNo).orElseThrow(()-> new IllegalArgumentException());
+		Comment comment = commentRepository.findById(commentNo).orElseThrow(()-> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
 		CommentDTO commentDTO = CommentDTO.EntityToDTO(comment);
 		return commentDTO;
 	}
 	
 	@Override
 	public int updateComment(CommentDTO commentDTO, Long commentNo, User loginUser) {
-		Comment commentEntity = commentRepository.findById(commentNo).orElseThrow(()-> new IllegalArgumentException());
+		Comment commentEntity = commentRepository.findById(commentNo).orElseThrow(()-> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
 		
 		if(commentEntity.getUser().getAccountId().equals(loginUser.getAccountId())) {
 			commentEntity.updateContent(commentDTO.getCommentContent());

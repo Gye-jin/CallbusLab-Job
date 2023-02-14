@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Builder
 
 public class UserDTO {
-	private long userId;
+	private long userNo;
 	private String userPw;
 	private	String nickName;
 	private String accountId;
@@ -41,7 +41,7 @@ public class UserDTO {
 	
 	public static UserDTO EntityToDTO(User user) {
 		UserDTO userDTO = UserDTO.builder()
-				.userId(user.getUserId())
+				.userNo(user.getUserNo())
 				.userPw(user.getUserPw())
 				.nickName(user.getNickName())
 				.accountId(user.getAccountId())

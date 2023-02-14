@@ -36,7 +36,7 @@ public class BoardController {
 	
 	// get진행이 안됨.(확인 필요)
 	@GetMapping("/board/{no}")
-	public ResponseEntity<?> boardRead(@PathVariable Long no){
+	public ResponseEntity<?> boardRead(@PathVariable Long no) {
 		return new ResponseEntity<BoardDTO>(boardService.BoardRead(no),HttpStatus.OK);
 	}
 	

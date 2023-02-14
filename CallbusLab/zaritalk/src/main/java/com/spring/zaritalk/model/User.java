@@ -40,7 +40,7 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long userId;
+	private long userNo;
 	@Column(nullable = false)
 	private String userPw;
 	
@@ -76,7 +76,7 @@ public class User {
 	
 	public static User DTOToEntity(UserDTO userDTO) {
 		User user = User.builder()
-				.userId(userDTO.getUserId())
+				.userNo(userDTO.getUserNo())
 				.userPw(userDTO.getUserPw())
 				.accountId(userDTO.getAccountId())
 				.nickName(userDTO.getNickName())
