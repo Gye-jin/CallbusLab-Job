@@ -5,11 +5,9 @@ import com.spring.zaritalk.model.User;
 
 public interface CommentService {
 	
-	public void CommentWrite(CommentDTO commentDTO, User loginUser);
+	public void CommentWrite(Long boardNo,CommentDTO commentDTO, User loginUser);
+		
+	public int updateComment(Long boardNo,CommentDTO commentDTO, User loginUser);
 	
-	public CommentDTO CommentRead(Long commentNo);
-	
-	public int updateComment(CommentDTO commentDTO, Long no, User loginUser);
-	
-	public int deleteComment(Long commentNo, User loginUser);
+	public int deleteComment(Long boardNo,CommentDTO commentDTO, User loginUser);
 }

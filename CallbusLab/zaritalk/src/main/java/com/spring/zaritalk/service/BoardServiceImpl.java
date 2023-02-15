@@ -1,5 +1,6 @@
 package com.spring.zaritalk.service;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.transaction.Transactional;
@@ -19,9 +20,11 @@ import com.spring.zaritalk.model.User;
 import com.spring.zaritalk.repository.BoardRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BoardServiceImpl implements BoardService{
 	
 	@Autowired
@@ -30,7 +33,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO) {
 		Pageable pageable = requestDTO.getPageable();
-		Page<Board> result = boardRepository.findAll(pageable);
+		Page<Board> result = boardRepository.findAllByDeletedDatetimeIsNull(pageable);
 		
 		Function<Board, BoardDTO> fn = (board -> BoardDTO.EntityToDTO(board));
 		
@@ -39,7 +42,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public PageResultDTO<BoardDTO, Board> getSearchList(String boardTitle, PageRequestDTO requestDTO) {
 		Pageable pageable = requestDTO.getPageable();
-		Page<Board> result = boardRepository.findAllByBoardTitle(boardTitle, pageable);
+		Page<Board> result = boardRepository.findAllByBoardTitleAndDeletedDatetimeIsNull(boardTitle, pageable);
 		
 		Function<Board, BoardDTO> fn = (board -> BoardDTO.EntityToDTO(board));
 		
@@ -50,7 +53,6 @@ public class BoardServiceImpl implements BoardService{
 	@Transactional
 	@Override
 	public void BoardWrite(BoardDTO boardDTO, User loginUser) {
-		
 		Board boardEntity = Board.DTOToEntity(boardDTO);
 		boardEntity.setHeart();
 		boardEntity.updateUser(loginUser);
@@ -60,20 +62,31 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public BoardDTO BoardRead(Long boardNo) {
 
-		Board board = boardRepository.findById(boardNo).orElseThrow(()-> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
+		Optional<Board> boardEntity = boardRepository.findByBoardNoAndDeletedDatetimeIsNull(boardNo);
+		if (!boardEntity.isPresent()) {
+			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
+			boardEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
+		}
+		Board board = boardEntity.orElseGet(Board::new);
+		
+		
 		BoardDTO boardDTO = BoardDTO.EntityToDTO(board);
-		System.out.println(boardDTO);
 		return boardDTO;
 	}
 	
 	@Transactional
 	@Override
 	public int updateBoard(BoardDTO boardDTO, Long boardNo, User loginUser) {
-		Board boardEntity = boardRepository.findById(boardNo).orElseThrow(()-> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
+		Optional<Board> boardEntity = boardRepository.findByBoardNoAndDeletedDatetimeIsNull(boardNo);
+		if (!boardEntity.isPresent()) {
+			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
+			boardEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
+		}
+		Board board = boardEntity.orElseGet(Board::new);
 		
-		if(boardEntity.getUser().getAccountId().equals(loginUser.getAccountId())) {
-			boardEntity.updateContent(boardDTO.getBoardContent());
-			boardEntity.updateTitle(boardDTO.getBoardTitle());
+		if(board.getUser().getAccountId().equals(loginUser.getAccountId())) {
+			board.updateContent(boardDTO.getBoardContent());
+			board.updateTitle(boardDTO.getBoardTitle());
 			return 1;
 		}else {
 			return 0;
@@ -84,10 +97,16 @@ public class BoardServiceImpl implements BoardService{
 	@Transactional
 	@Override
 	public int deleteBoard(Long boardNo, User loginUser) {
-		Board boardEntity = boardRepository.findById(boardNo).orElseThrow(()-> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
+		Optional<Board> boardEntity = boardRepository.findByBoardNoAndDeletedDatetimeIsNull(boardNo);
+		if (!boardEntity.isPresent()) {
+			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
+			boardEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
+		}
+		Board board = boardEntity.orElseGet(Board::new);
 		
-		if(boardEntity.getUser().getAccountId().equals(loginUser.getAccountId())) {
-			boardRepository.deleteById(boardNo);
+		
+		if(board.getUser().getAccountId().equals(loginUser.getAccountId())) {
+			board.deleteBoard();
 			return 1;
 		}else {
 			return 0;

@@ -20,10 +20,12 @@ import com.spring.zaritalk.repository.HeartRepository;
 import com.spring.zaritalk.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class HeartServiceImpl implements HeartService{
 	
 	@Autowired
@@ -37,26 +39,30 @@ public class HeartServiceImpl implements HeartService{
 	@Override
 	@Transactional
 	public void doheart(Long boardNo, User loginUser, boolean doheart) {
-		Board boardEntity = boardRepository.findById(boardNo)
-				.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
-		Optional<Heart> heartEntity = heartRepository.findByBoardAndUser(boardEntity, loginUser);
+		
+		Optional<Board> boardEntity = boardRepository.findById(boardNo);
+		if (!boardEntity.isPresent()) {
+			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
+			boardEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
+		}
+		Board board = boardEntity.orElseGet(Board::new);
+		
+		Optional<Heart> heartEntity = heartRepository.findByBoardAndUser(board, loginUser);
 
 		if (!heartEntity.isPresent()) {
-			Heart heart = Heart.builder().board(boardEntity).doHeart(doheart).user(loginUser).build();
+			Heart heart = Heart.builder().board(board).doHeart(doheart).user(loginUser).build();
 			heartRepository.saveAndFlush(heart);
-			boardEntity.plusHeartCnt();
+			board.plusHeartCnt();
 		} else {
 			Heart heart = heartEntity.orElseGet(Heart::new);
 			if (doheart) {
 				heart.updateDoheart(doheart);
-				System.out.println("+");
-				boardEntity.plusHeartCnt();
-				System.out.println(boardEntity.getHeartCnt());
+				board.plusHeartCnt();
+				System.out.println(board.getHeartCnt());
 			} else {
 				heart.updateDoheart(doheart);
-				System.out.println("-");
-				boardEntity.minusHeartCnt();
-				System.out.println(boardEntity.getHeartCnt());
+				board.minusHeartCnt();
+				System.out.println(board.getHeartCnt());
 			}
 
 		}
@@ -67,12 +73,15 @@ public class HeartServiceImpl implements HeartService{
 	@Transactional
 	public List<HeartHistoryDTO> getDoHeart(String accountId) {
 		System.out.println("++++++++++++++++++");
-		User user = userRepotiroy.findByAccountId(accountId);
-		
-			return user.getHearts().stream()
-					.map(heart -> HeartHistoryDTO.EntityToDTO(heart))
-					.collect(Collectors.toList());
+		Optional<User> userEntity = userRepotiroy.findByAccountIdAndQuitIsFalse(accountId);
+		if (!userEntity.isPresent()) {
+			log.error("ApiControllerException: {}", ErrorCode.BAD_REQUEST);
+			userEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.BAD_REQUEST));
 		}
+		User user = userEntity.orElseGet(User::new);
+
+		return user.getHearts().stream().map(heart -> HeartHistoryDTO.EntityToDTO(heart)).collect(Collectors.toList());
+	}
 
 		
 	

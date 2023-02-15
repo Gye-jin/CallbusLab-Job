@@ -1,5 +1,7 @@
 package com.spring.zaritalk.service;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +17,13 @@ import com.spring.zaritalk.repository.BoardRepository;
 import com.spring.zaritalk.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class CommentServiceImpl implements CommentService{
 	
 	@Autowired
@@ -30,29 +34,37 @@ public class CommentServiceImpl implements CommentService{
 	
 
 	@Override
-	public void CommentWrite(CommentDTO commentDTO, User loginUser) {
+	public void CommentWrite(Long boardNo,CommentDTO commentDTO, User loginUser) {
 			
 		System.out.println(commentDTO.getBoardNo());
 		Comment comment = Comment.DTOToEntity(commentDTO);
-		Board boardEntity = boardRepository.findById(commentDTO.getBoardNo()).orElseThrow(()-> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
-		comment.updateBoard(boardEntity);
+		Optional<Board> boardEntity = boardRepository.findByBoardNoAndDeletedDatetimeIsNull(boardNo);
+		if (!boardEntity.isPresent()) {
+			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
+			boardEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
+		}
+		Board board = boardEntity.orElseGet(Board::new);
+		
+		comment.updateBoard(board);
 		comment.updateUser(loginUser);
 		commentRepository.save(comment);
 	}
-	
-	@Override
-	public CommentDTO CommentRead(Long commentNo) {
-		Comment comment = commentRepository.findById(commentNo).orElseThrow(()-> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
-		CommentDTO commentDTO = CommentDTO.EntityToDTO(comment);
-		return commentDTO;
-	}
-	
-	@Override
-	public int updateComment(CommentDTO commentDTO, Long commentNo, User loginUser) {
-		Comment commentEntity = commentRepository.findById(commentNo).orElseThrow(()-> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
 		
-		if(commentEntity.getUser().getAccountId().equals(loginUser.getAccountId())) {
-			commentEntity.updateContent(commentDTO.getCommentContent());
+	@Override
+	public int updateComment(Long boardNo,CommentDTO commentDTO, User loginUser) {
+		
+		Optional<Comment> commentEntity = commentRepository.findById(commentDTO.getCommentNo());
+		if (!commentEntity.isPresent()) {
+			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
+			commentEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
+		}
+		Comment comment = commentEntity.orElseGet(Comment::new);
+		
+		if(comment.getBoard().getDeletedDatetime() != null) {
+			return -1;
+		}
+		else if(comment.getUser().getAccountId().equals(loginUser.getAccountId())) {
+			comment.updateContent(commentDTO.getCommentContent());
 			return 1;
 		}else {
 			return 0;
@@ -61,10 +73,17 @@ public class CommentServiceImpl implements CommentService{
 	}
 	
 	@Override
-	public int deleteComment(Long commentNo, User loginUser) {
-		Comment commentEntity = commentRepository.findById(commentNo).orElseThrow(()-> new IllegalArgumentException());
-		if(commentEntity.getUser().getAccountId().equals(loginUser.getAccountId())) {
-			commentRepository.deleteById(commentNo);
+	public int deleteComment(Long boardNo,CommentDTO commentDTO, User loginUser) {
+		Optional<Comment> commentEntity = commentRepository.findById(commentDTO.getCommentNo());
+		if (!commentEntity.isPresent()) {
+			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
+			commentEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
+		}
+		Comment comment = commentEntity.orElseGet(Comment::new);
+		
+		
+		if(comment.getUser().getAccountId().equals(loginUser.getAccountId())) {
+			commentRepository.deleteById(commentDTO.getCommentNo());
 			return 1;
 		}else {
 			return 0;

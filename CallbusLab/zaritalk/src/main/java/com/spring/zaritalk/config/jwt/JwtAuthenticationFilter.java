@@ -23,10 +23,12 @@ import com.spring.zaritalk.config.auth.LoginUser;
 import com.spring.zaritalk.model.User;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 // 스프링 시큐리티에서 UsernamePasswordAuthenticationFilter가 있음.
 // login 요청해서 username, password 전송하면(post)
 // usernamepasswordAuthenticationFilter 동작을 함.
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
@@ -42,22 +44,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		try {
 
 			ObjectMapper om = new ObjectMapper();
-			System.out.println("*******");
 			User user;
 			user = om.readValue(request.getInputStream(), User.class);
 			
-			System.out.println(user.getAccountId() + "id");
-			System.out.println(user.getNickName() + "nickname");
-			System.out.println(user.getUserPw() + "pw");
-					
-			System.out.println(user);
+			log.info("{}가 로그인 시도함.",user.getAccountId());		
 			UsernamePasswordAuthenticationToken tuthenticationToken = new UsernamePasswordAuthenticationToken(
 					user.getAccountId(), user.getUserPw());
 			Authentication authentication = authenticationManager.authenticate(tuthenticationToken);
 			// authentication 객체가 session 영역에 저장됨 => 로그인이 되었다는 뜻임.
 			LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-			System.out.println();
-			System.out.println("로그인완료" + loginUser.getUsername());
+			log.info("{}가 로그인 완료함.",loginUser.getUsername());
 			return authentication;
 			
 		} catch (IOException e) {

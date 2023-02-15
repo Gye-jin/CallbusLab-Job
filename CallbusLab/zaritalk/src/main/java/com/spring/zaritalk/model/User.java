@@ -88,12 +88,18 @@ public class User {
 		return user;
 	}
 	
-	public String passwordEncoding(String password) {
-		return this.userPw = password;
+	public void updateUser(String nickname, String password, UserAccount userAccount) {
+		this.nickName = nickname;
+		this.userPw = password;
+		this.accountType =userAccount;
 	}
 	
-	public boolean withDrawUser(boolean quit) {
-		return this.quit = quit;
+	public void passwordEncoding(String password) {
+		this.userPw = password;
+	}
+	
+	public void withDrawUser(boolean quit) {
+		this.quit = quit;
 	}
 	
 }

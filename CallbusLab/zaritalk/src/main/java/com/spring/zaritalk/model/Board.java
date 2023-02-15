@@ -1,5 +1,6 @@
 package com.spring.zaritalk.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +19,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.zaritalk.dto.BoardDTO;
+import com.spring.zaritalk.repository.CommentRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +46,8 @@ import lombok.ToString;
 })
 public class Board {
 	
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "board_no")
@@ -61,6 +66,9 @@ public class Board {
 	@LastModifiedDate
 	@Column(nullable = false,name = "modified_datetime")
 	private LocalDateTime modifiedDatetime;
+	
+	@Column(name = "deleted_datetime")
+	private LocalDateTime deletedDatetime;
 	
 	@Column(nullable = false,name = "heart_cnt")
 	private Long heartCnt;
@@ -115,6 +123,10 @@ public class Board {
 	
 	public void setHeart() {
 		this.heartCnt=0L;
+	}
+	
+	public void deleteBoard() {
+			this.deletedDatetime = LocalDateTime.now();
 	}
 
 }

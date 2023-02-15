@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.and()
 		.addFilter(new JwtAuthenticationFilter(authenticationManager()))	//authenticationManager
 		.addFilter(new JwtAuthrizationFilter(authenticationManager(),userrepository))	//authenticationManager
-		.addFilter(corsfilter)// 기존의 crossorigin(인증 x), 시큐리티 필터에 등록 인증(o)
+		.addFilter(corsfilter)
 		.formLogin().disable()
 		.httpBasic().disable();
 		
