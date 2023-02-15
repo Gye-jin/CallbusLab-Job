@@ -8,7 +8,7 @@ import lombok.Getter;
 public class ErrorResponse {
 	
 	
-	  private final LocalDateTime timestamp = LocalDateTime.now();
+		private final LocalDateTime timestamp = LocalDateTime.now();
 	    private final int status;
 	    private final String error;
 	    private final String code;

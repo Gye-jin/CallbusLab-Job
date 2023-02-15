@@ -45,20 +45,7 @@ public class UserServiceImpl implements UserService{
 		user.passwordEncoding(encoder.encode(user.getUserPw()));
 		userRepository.save(user);
 	}
-	
-//	@Override
-//	@Transactional
-//	public void updateUser(User loginUser,UserDTO userDTO) {
-//		Optional<User> userEntity = userRepository.findById(loginUser.getUserNo());
-//		if (!userEntity.isPresent()) {
-//			log.error("IllegalArgumentException: {}", userEntity);
-//			userEntity.orElseThrow(() -> new IllegalArgumentException());
-//		}else {		
-//		User user = userEntity.orElseGet(User::new);
-//		user.updateUser(userDTO.getNickName(), userDTO.getUserPw(), userDTO.getAccountType());
-//		}
-//	}
-	
+		
 	@Override
 	@Transactional
 	public void withdrawUser(User loginUser) {

@@ -10,7 +10,7 @@ public interface BoardService {
 	
 	public PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO);
 	
-	public PageResultDTO<BoardDTO, Board> getSearchList(String target, PageRequestDTO requestDTO);
+	public PageResultDTO<BoardDTO, Board> getSearchList(String boardTitle, PageRequestDTO requestDTO);
 	
 	public void BoardWrite(BoardDTO boardDTO, User user);
 	

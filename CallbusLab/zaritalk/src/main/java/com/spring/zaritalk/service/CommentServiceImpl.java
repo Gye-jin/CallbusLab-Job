@@ -53,7 +53,7 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	public int updateComment(Long boardNo,CommentDTO commentDTO, User loginUser) {
 		
-		Optional<Comment> commentEntity = commentRepository.findById(commentDTO.getCommentNo());
+		Optional<Comment> commentEntity = commentRepository.findByCommentNoAndDeletedDatetimeIsNull(commentDTO.getCommentNo());
 		if (!commentEntity.isPresent()) {
 			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
 			commentEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
@@ -74,7 +74,8 @@ public class CommentServiceImpl implements CommentService{
 	
 	@Override
 	public int deleteComment(Long boardNo,CommentDTO commentDTO, User loginUser) {
-		Optional<Comment> commentEntity = commentRepository.findById(commentDTO.getCommentNo());
+		Optional<Comment> commentEntity = commentRepository.findByCommentNoAndDeletedDatetimeIsNull(commentDTO.getCommentNo());
+		System.out.println(commentEntity.orElseGet(Comment::new).getCommentContent());
 		if (!commentEntity.isPresent()) {
 			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
 			commentEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
@@ -83,7 +84,7 @@ public class CommentServiceImpl implements CommentService{
 		
 		
 		if(comment.getUser().getAccountId().equals(loginUser.getAccountId())) {
-			commentRepository.deleteById(commentDTO.getCommentNo());
+			comment.deleteComment();
 			return 1;
 		}else {
 			return 0;

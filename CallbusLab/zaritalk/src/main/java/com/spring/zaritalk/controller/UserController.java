@@ -47,16 +47,6 @@ public class UserController {
 		session.invalidate();
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}
-//	// 회원정보 수정 불가함 세션때문에
-//	@PutMapping("/api/update")
-//	public ResponseEntity<?> update(HttpServletRequest request, UserDTO userDTO){
-//		HttpSession session = request.getSession();
-//		User loginUser = (User) session.getAttribute("loginUser");
-//		userService.updateUser(loginUser,userDTO);
-//		log.info("{}가 회원정보 수정함",loginUser.getAccountId());
-//		session.invalidate();
-//		return new ResponseEntity<String>("ok", HttpStatus.OK);
-//	}
 	
 	// 회원 탈퇴
 	@DeleteMapping("/api/delete")

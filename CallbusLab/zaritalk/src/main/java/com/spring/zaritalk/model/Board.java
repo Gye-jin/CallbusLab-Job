@@ -1,6 +1,5 @@
 package com.spring.zaritalk.model;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +18,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.zaritalk.dto.BoardDTO;
-import com.spring.zaritalk.repository.CommentRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +35,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = {"comments", "hearts"})
+@ToString(exclude = {"comments", "hearts","backupcomments"})
 @EntityListeners(AuditingEntityListener.class)	
 @Builder
 @Table(indexes = {
@@ -83,11 +80,10 @@ public class Board {
 	@JsonIgnore
 	private List<Heart> hearts = new ArrayList<Heart>();
 	
-//	// [Comment Join]
+	// [Comment Join]
 	@OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Comment> comments = new ArrayList<Comment>();
-	
 	
 	public static Board DTOToEntity(BoardDTO boardDTO) {
 		Board board = Board.builder()

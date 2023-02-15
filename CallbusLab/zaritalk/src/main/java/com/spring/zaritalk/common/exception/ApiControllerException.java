@@ -9,7 +9,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ApiControllerException extends RuntimeException{
 
-
 	private static final long serialVersionUID = 1L;
 	
 	private final ErrorCode errorCode;

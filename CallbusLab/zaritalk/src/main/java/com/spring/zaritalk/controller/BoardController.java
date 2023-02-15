@@ -47,7 +47,7 @@ public class BoardController {
 	
 	// 검색 기능을 이용한 검색 진행
 	@SuppressWarnings("rawtypes")
-	@GetMapping("/page/{boardTitle}/{pageNo}/{size}")
+	@GetMapping("/page/{pageNo}/{size}/{boardTitle}")
 	public ResponseEntity<?> boardSearch(@PathVariable String boardTitle,@PathVariable int pageNo, @PathVariable int size) {
 		log.info("{} 검색 진행",boardTitle);
 		PageRequestDTO requestDTO = PageRequestDTO.builder().page(pageNo).size(size).build();
@@ -89,11 +89,11 @@ public class BoardController {
 		}
 	}
 	// 게시글 삭제
-	@DeleteMapping("/api/board/{no}")
-	public ResponseEntity<?> boardDelete(@PathVariable Long no,HttpServletRequest request){
+	@DeleteMapping("/api/board/{boardNo}")
+	public ResponseEntity<?> boardDelete(@PathVariable Long boardNo,HttpServletRequest request){
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
-		int result = boardService.deleteBoard(no,loginUser);
+		int result = boardService.deleteBoard(boardNo,loginUser);
 		
 		if(result == 1) {
 			return new ResponseEntity<String>("ok", HttpStatus.OK);

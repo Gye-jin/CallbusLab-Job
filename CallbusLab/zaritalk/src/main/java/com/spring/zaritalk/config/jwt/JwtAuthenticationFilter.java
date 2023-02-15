@@ -46,20 +46,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			ObjectMapper om = new ObjectMapper();
 			User user;
 			user = om.readValue(request.getInputStream(), User.class);
+
+			log.info("{}가 로그인 시도함.", user.getAccountId());
+			UsernamePasswordAuthenticationToken tuthenticationToken = new UsernamePasswordAuthenticationToken(user.getAccountId(), user.getUserPw());
 			
-			log.info("{}가 로그인 시도함.",user.getAccountId());		
-			UsernamePasswordAuthenticationToken tuthenticationToken = new UsernamePasswordAuthenticationToken(
-					user.getAccountId(), user.getUserPw());
 			Authentication authentication = authenticationManager.authenticate(tuthenticationToken);
 			// authentication 객체가 session 영역에 저장됨 => 로그인이 되었다는 뜻임.
 			LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-			log.info("{}가 로그인 완료함.",loginUser.getUsername());
+			log.info("{}가 로그인 완료함.", loginUser.getUsername());
 			return authentication;
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		};
+		}
+		;
 
 		return null;
 	}
@@ -76,7 +77,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.withClaim("Authentication", loginUser.getUser().getAccountType().toString())
 				.withClaim("no", loginUser.getUser().getUserNo())
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET));
-		System.out.println(jwtToken);
 		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
 	}
 	

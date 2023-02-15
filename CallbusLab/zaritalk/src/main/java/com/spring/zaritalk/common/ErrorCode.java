@@ -14,13 +14,15 @@ public enum ErrorCode {
 	 */
 	BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 	
-	
-	UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"권한이 없습니다."),
+	/*
+	 * 401 UNAUTHORIZED: 인가되지 않은 회원
+	 */
+	UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"인가되지 않은 회원입니다."),
 	
 	/*
 	 * 403 FORBIDDEN: 접근할 권리가 없음.
 	 */
-	FORBIDDEN(HttpStatus.FORBIDDEN,"권한이 없습니다. "),
+	FORBIDDEN(HttpStatus.FORBIDDEN,"권한이 없습니다."),
 	
 	/*
 	 * 404 NOT_FOUND: 리소스를 찾을 수 없음

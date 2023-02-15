@@ -47,6 +47,9 @@ public class Comment {
 	@Column(nullable = false,name = "modified_datetime")
 	private LocalDateTime modifiedDatetime;
 	
+	@Column(name = "deleted_datetime")
+	private LocalDateTime deletedDatetime;
+	
 	// Join
 	// --------------------------------------------------------------------------------------------------------------------------------
 	// [Board Join]
@@ -83,6 +86,8 @@ public class Comment {
 	public void updateContent(String Content) {
 		this.commentContent = Content;
 	}
-	
+	public void deleteComment() {
+		this.deletedDatetime = LocalDateTime.now();
+}
 
 }

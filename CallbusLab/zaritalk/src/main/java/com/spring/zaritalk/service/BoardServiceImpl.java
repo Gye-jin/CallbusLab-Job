@@ -16,6 +16,7 @@ import com.spring.zaritalk.common.PageResultDTO;
 import com.spring.zaritalk.common.exception.ApiControllerException;
 import com.spring.zaritalk.dto.BoardDTO;
 import com.spring.zaritalk.model.Board;
+import com.spring.zaritalk.model.Heart;
 import com.spring.zaritalk.model.User;
 import com.spring.zaritalk.repository.BoardRepository;
 
@@ -30,7 +31,7 @@ public class BoardServiceImpl implements BoardService{
 	@Autowired
 	BoardRepository boardRepository;
 	
-	@Override
+//	@Override
 	public PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO) {
 		Pageable pageable = requestDTO.getPageable();
 		Page<Board> result = boardRepository.findAllByDeletedDatetimeIsNull(pageable);
@@ -68,9 +69,11 @@ public class BoardServiceImpl implements BoardService{
 			boardEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
 		}
 		Board board = boardEntity.orElseGet(Board::new);
-		
-		
+		for(Heart heart : board.getHearts()) {
+			System.out.println(heart.getUser().getAccountId());
+		}
 		BoardDTO boardDTO = BoardDTO.EntityToDTO(board);
+
 		return boardDTO;
 	}
 	

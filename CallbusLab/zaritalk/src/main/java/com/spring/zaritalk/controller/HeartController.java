@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.zaritalk.dto.HeartDTO;
 import com.spring.zaritalk.dto.HeartHistoryDTO;
 import com.spring.zaritalk.model.User;
-import com.spring.zaritalk.service.BoardServiceImpl;
 import com.spring.zaritalk.service.HeartServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +29,6 @@ public class HeartController {
 	
 	@Autowired
 	HeartServiceImpl heartService;
-	
-	@Autowired
-	BoardServiceImpl boardService;
 	
 	// 좋아요 기능
 	@PutMapping("/{boardNo}/heart")
@@ -48,7 +44,7 @@ public class HeartController {
 	
 	// user가 좋아요한 게시글 가져오기
 	@GetMapping("/heart/{accountId}")
-	public ResponseEntity<?>  getLike(@PathVariable("accountId") String accountId,HttpServletRequest request) {	
+	public ResponseEntity<?> getHeart(@PathVariable("accountId") String accountId,HttpServletRequest request) {	
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");		
 		log.info("{}가{}좋아요 누른 내역을 조회함.",loginUser.getAccountId(),accountId);

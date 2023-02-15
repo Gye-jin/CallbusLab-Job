@@ -25,6 +25,7 @@
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <fileNamePattern>${logdir}/${moduleId}/${logback}/warn_${type}.%d{yyyy-MM-dd}.gz</fileNamePattern>
       <maxHistory>30</maxHistory>
+	 <totalSizeCap>1GB</totalSizeCap>
     </rollingPolicy>
     <encoder>
       <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
@@ -40,6 +41,7 @@
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <fileNamePattern>${logdir}/${moduleId}/${logback}/info_${type}.%d{yyyy-MM-dd}.gz</fileNamePattern>
       <maxHistory>30</maxHistory>
+     <totalSizeCap>1GB</totalSizeCap>
     </rollingPolicy>
     <encoder>
       <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
@@ -55,6 +57,7 @@
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <fileNamePattern>${logdir}/${moduleId}/${logback}/error_${type}.%d{yyyy-MM-dd}.gz</fileNamePattern>
       <maxHistory>30</maxHistory>
+      <totalSizeCap>1GB</totalSizeCap>
     </rollingPolicy>
     <encoder>
       <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
@@ -68,6 +71,5 @@
 	<appender-ref ref="WARN_LOG" />
 	<appender-ref ref="ERROR_LOG" /> 
 	 -->
-
   </root>
 </configuration>

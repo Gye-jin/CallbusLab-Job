@@ -7,8 +7,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
+import com.spring.zaritalk.config.jwt.CustomAuthenticationEntryPoint;
 import com.spring.zaritalk.config.jwt.JwtAuthenticationFilter;
 import com.spring.zaritalk.config.jwt.JwtAuthrizationFilter;
 import com.spring.zaritalk.repository.UserRepository;
@@ -34,17 +37,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
 		http.authorizeRequests()
 		.antMatchers("/login","/join","/board/**","/page/**").permitAll()
-		.antMatchers("/api/**").authenticated();
+		.antMatchers("/api/**").authenticated()
+		.and()
+		.exceptionHandling()
+		.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 		
 		http.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
 		.addFilter(new JwtAuthenticationFilter(authenticationManager()))	//authenticationManager
-		.addFilter(new JwtAuthrizationFilter(authenticationManager(),userrepository))	//authenticationManager
+		.addFilter(new JwtAuthrizationFilter(authenticationManager(),userrepository))
 		.addFilter(corsfilter)
 		.formLogin().disable()
 		.httpBasic().disable();
-		
 	}
 	
 	
