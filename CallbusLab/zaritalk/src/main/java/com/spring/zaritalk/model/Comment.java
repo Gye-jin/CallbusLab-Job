@@ -33,17 +33,18 @@ import lombok.NoArgsConstructor;
 public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "comment_no")
 	private Long commentNo;
 	
-	@Column(nullable = false)
+	@Column(nullable = false,name = "comment_content")
 	private String commentContent;
 	
 	@CreatedDate
-	@Column(updatable = false,nullable = false)
+	@Column(updatable = false,nullable = false, name = "written_datetime")
 	private LocalDateTime writtenDatetime;
 	
-	@Column(nullable = false)
 	@LastModifiedDate
+	@Column(nullable = false,name = "modified_datetime")
 	private LocalDateTime modifiedDatetime;
 	
 	// Join

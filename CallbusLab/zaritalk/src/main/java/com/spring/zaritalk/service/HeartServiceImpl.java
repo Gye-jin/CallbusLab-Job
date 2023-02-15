@@ -1,6 +1,8 @@
 package com.spring.zaritalk.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -9,11 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.spring.zaritalk.common.ErrorCode;
 import com.spring.zaritalk.common.exception.ApiControllerException;
+import com.spring.zaritalk.dto.HeartHistoryDTO;
 import com.spring.zaritalk.model.Board;
 import com.spring.zaritalk.model.Heart;
 import com.spring.zaritalk.model.User;
 import com.spring.zaritalk.repository.BoardRepository;
 import com.spring.zaritalk.repository.HeartRepository;
+import com.spring.zaritalk.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +30,8 @@ public class HeartServiceImpl implements HeartService{
 	HeartRepository heartRepository;
 	@Autowired
 	BoardRepository boardRepository;
+	@Autowired
+	UserRepository userRepotiroy;
 	
 	
 	@Override
@@ -59,11 +65,15 @@ public class HeartServiceImpl implements HeartService{
 	
 	@Override
 	@Transactional
-	public Long getDoHeart(Long boardNo) {
-		Board boardEntity = boardRepository.findById(boardNo).orElseThrow(()-> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
-		Long hearts = heartRepository.countByBoard(boardEntity);
-			return hearts;
+	public List<HeartHistoryDTO> getDoHeart(String accountId) {
+		System.out.println("++++++++++++++++++");
+		User user = userRepotiroy.findByAccountId(accountId);
+		
+			return user.getHearts().stream()
+					.map(heart -> HeartHistoryDTO.EntityToDTO(heart))
+					.collect(Collectors.toList());
 		}
+
 		
 	
 }

@@ -12,9 +12,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -36,26 +38,31 @@ import lombok.ToString;
 @ToString(exclude = {"comments", "hearts"})
 @EntityListeners(AuditingEntityListener.class)	
 @Builder
+@Table(indexes = {
+		@Index(name = "idx__boardNo",columnList = "board_title")
+})
 public class Board {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "board_no")
 	private Long boardNo;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, name = "board_title")
 	private String boardTitle;
 	
-	@Column(nullable = false,length = 1000000)
+	@Column(nullable = false,length = 1000000,name = "board_content")
 	private String boardContent;
 	
 	@CreatedDate
-	@Column(updatable = false,nullable = false)
+	@Column(updatable = false,nullable = false,name = "written_datetime")
 	private LocalDateTime writtenDatetime;
 	
 	@LastModifiedDate
-	@Column(nullable = false)
+	@Column(nullable = false,name = "modified_datetime")
 	private LocalDateTime modifiedDatetime;
 	
+	@Column(nullable = false,name = "heart_cnt")
 	private Long heartCnt;
 	
 	// [User Join]

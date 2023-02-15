@@ -24,14 +24,16 @@ public class UserController {
 	@Autowired
 	UserServiceImpl userService;	
 	
-	// login => filter에서 허용 가능
+	// login => filter에서 진행
 	
+	// 회원 가입
 	@PostMapping("/join")
 	public ResponseEntity<?> join(@RequestBody UserDTO userDTO) {
 		userService.joinUser(userDTO);
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}
 	
+	// 로그 아웃
 	@GetMapping("/api/logout")
 	public ResponseEntity<?> logout(HttpServletRequest request){
 		HttpSession session = request.getSession();
@@ -41,9 +43,9 @@ public class UserController {
 	}
 	
 	
-	// true값일 경우 필터로 걸러내는 작업 필요함.
+	// 회원 탈퇴
 	@PutMapping("/api/delete")
-	public ResponseEntity<?> update(HttpServletRequest request){
+	public ResponseEntity<?> quit(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
 		userService.withdrawUser(loginUser);

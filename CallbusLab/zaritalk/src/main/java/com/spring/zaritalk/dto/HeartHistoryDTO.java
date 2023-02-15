@@ -11,20 +11,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class HeartDTO {
+public class HeartHistoryDTO {
+	
 	private Long heartNo;
 	private boolean doHeart;
-	private String userId;
+	private Long boardNo;
 	
-	
-	
-	public static HeartDTO EntityToDTO(Heart heart) {
-		HeartDTO heartDTO = HeartDTO.builder()
+	public static HeartHistoryDTO EntityToDTO(Heart heart) {
+		HeartHistoryDTO heartHistryDTO = HeartHistoryDTO.builder()
 				.heartNo(heart.getHeartNo())
 				.doHeart(heart.isDoHeart())
-				.userId(heart.getUser().getAccountId())
+				.boardNo(heart.getBoard().getBoardNo())
 				.build();
-		return heartDTO;
+		return heartHistryDTO;
 	}
-
 }

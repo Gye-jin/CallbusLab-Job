@@ -2,6 +2,7 @@ package com.spring.zaritalk.common;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class PageRequestDTO {
 	}
 	
 	public Pageable getPageable() {
-		return PageRequest.of(page - 1, size);
+		return PageRequest.of(page - 1, size, Sort.by("modifiedDatetime").descending());
 	}
 	
 }

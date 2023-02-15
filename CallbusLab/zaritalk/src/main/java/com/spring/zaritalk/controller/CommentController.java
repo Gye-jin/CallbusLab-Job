@@ -26,6 +26,7 @@ public class CommentController {
 	@Autowired
 	CommentServiceImpl commentService;
 	
+	// 댓글 작성
 	@PostMapping("/comment")
 	public ResponseEntity<?> commentWrite(@RequestBody CommentDTO commentDTO,HttpServletRequest request){
 		HttpSession session = request.getSession();
@@ -36,12 +37,12 @@ public class CommentController {
 		return new ResponseEntity<String>("ok",HttpStatus.CREATED);
 	}
 	
-	// get진행이 안됨.(확인 필요)
+	// 댓글 조회
 	@GetMapping("/comment/{no}")
 	public ResponseEntity<?> commentRead(@PathVariable Long no){
 		return new ResponseEntity<CommentDTO>(commentService.CommentRead(no),HttpStatus.OK);
 	}
-	
+	// 댓글 수정
 	@PutMapping("/comment/{no}")
 	public  ResponseEntity<?> commentUpdate(@RequestBody CommentDTO commentDTO, @PathVariable Long no,HttpServletRequest request){
 		HttpSession session = request.getSession();
@@ -53,7 +54,7 @@ public class CommentController {
 			return new ResponseEntity<String>("fail", HttpStatus.FORBIDDEN);
 		}
 	}
-	
+	// 댓글 삭제
 	@DeleteMapping("/comment/{no}")
 	public ResponseEntity<?> commentDelete(@PathVariable Long no,HttpServletRequest request){
 		HttpSession session = request.getSession();

@@ -1,5 +1,6 @@
 package com.spring.zaritalk.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -28,8 +29,10 @@ import lombok.NoArgsConstructor;
 public class Heart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "heart_no")
 	private Long heartNo;
 	
+	@Column(name = "do_heart")
 	private boolean doHeart;
 	
 	

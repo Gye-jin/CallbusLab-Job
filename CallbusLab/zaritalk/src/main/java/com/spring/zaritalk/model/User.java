@@ -40,22 +40,23 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_no")
 	private long userNo;
-	@Column(nullable = false)
+	@Column(nullable = false,name = "user_pw")
 	private String userPw;
 	
-	@Column(nullable = false)
+	@Column(nullable = false,name = "nickname")
 	private	String nickName;
 	
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true,name = "account_id")
 	private String accountId;
 	
 	@Enumerated(EnumType.ORDINAL)
-	@Column(nullable = false)
+	@Column(nullable = false,name = "account_type")
 	private UserAccount accountType;
 
 	@CreatedDate
-	@Column(updatable = false, nullable = false)
+	@Column(updatable = false, nullable = false,name = "create_time")
 	private LocalDateTime createTime;
 	
 	@Column(nullable = false)

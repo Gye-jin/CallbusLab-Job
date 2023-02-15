@@ -36,6 +36,15 @@ public class BoardServiceImpl implements BoardService{
 		
 		return new PageResultDTO<BoardDTO, Board>(result, fn);
 	}
+	@Override
+	public PageResultDTO<BoardDTO, Board> getSearchList(String boardTitle, PageRequestDTO requestDTO) {
+		Pageable pageable = requestDTO.getPageable();
+		Page<Board> result = boardRepository.findAllByBoardTitle(boardTitle, pageable);
+		
+		Function<Board, BoardDTO> fn = (board -> BoardDTO.EntityToDTO(board));
+		
+		return new PageResultDTO<BoardDTO, Board>(result, fn);
+	}
 	
 	
 	@Transactional
