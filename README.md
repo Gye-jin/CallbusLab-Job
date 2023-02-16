@@ -100,7 +100,7 @@ Swagger 접속 후 컨트롤러 별로 실행 후 확인 가능.
    
 - 게시글 목록에선 작성한 사용자가 어떤 계정 타입인지와 좋아요 수, 자신이 좋아요한 글인지 아닌지를 표시해주어야 함.
    
-   * 코드 작성 예시
+   * 출력물 예시
       ```
       "boardList": [
        {
@@ -142,15 +142,84 @@ Swagger 접속 후 컨트롤러 별로 실행 후 확인 가능.
   * 게시글 목록에서 게시글 번호와 작성자, 계정이 확인이 가능하며 게시글 내에 좋아요 받은 횟수또한 확인이 가능하며,
      hearts라는 DTO안에 좋아요를 한 유저가 어떤 사람인지 확인이 가능함.
 
+* 로그인한 사용자를 HTTP Header 중 Authentication에 따라서 구분  
+   * 출력물 예시  
+	
+	```
+	authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9
+	...
+	iwC2L41gFfEMHTNxBubbJzH3T8feGs2tOWP4OhDhyObVfxr44ZUhP3Cqn6sdGNfTq9jGxA 
+	```
+
+
+  * 로그인 시 Header에 저장되는 authorization에 발급된 JWT토큰을 이용해 회원을 구분함.
+	
+*  글에 `좋아요`는 한 계정이 한 글에 한 번만 할 수 있습니다.
+	* 코드 작성 예시
+	```
+		if (!heartEntity.isPresent()) {
+			Heart heart = Heart.builder().board(board).doHeart(doheart).user(loginUser).build();
+			heartRepository.saveAndFlush(heart);
+			board.plusHeartCnt();
+	
+		} else {
+			Heart heart = heartEntity.orElseGet(Heart::new);
+			if (doheart) {
+				heart.updateDoheart(doheart);
+				board.plusHeartCnt();
+
+			} else {
+				heart.updateDoheart(doheart);
+				board.minusHeartCnt();
+	
+			}
+	```
+	* 좋아요가 존재하지 않을 경우에는 좋아요를 입력시켜주고, 그렇지 않을 경우에는 입력받은 데이터가 True일 경우에는 +1, false일 경우 -1을 해줌.
+
+*  어떤 사용자가 어떤 글에 좋아요 했는지 히스토리를 확인할 수 있어야 합니다.
+	* 출력물 예시
+	```
+		[
+	  {
+	    "heartNo": 10,
+	    "doHeart": true,
+	    "boardNo": 6
+	  },
+	  {
+	    "heartNo": 11,
+	    "doHeart": true,
+	    "boardNo": 7
+	  },
+	  {
+	    "heartNo": 12,
+	    "doHeart": true,
+	    "boardNo": 8
+	  },
+	  {
+	    "heartNo": 13,
+	    "doHeart": true,
+	    "boardNo": 9
+	  }
+	]
+	```
+	* 유저 검색시 유저가 그동안 좋아요 누른 게시글에 대한 확인이 가능함.
+	
+	
+*  각 글은 작성시간, 마지막 수정시간, 삭제시간에 대한 히스토리를 확인할 수 있어야 합니다.
+	* 코드 작성 예시		
+	```
+	@CreatedDate
+	@Column(updatable = false,nullable = false,name = "written_datetime")
+	private LocalDateTime writtenDatetime;
+
+	@LastModifiedDate
+	@Column(nullable = false,name = "modified_datetime")
+	private LocalDateTime modifiedDatetime;
+
+	@Column(name = "deleted_datetime")
+	private LocalDateTime deletedDatetime;
+	```	
+	* 게시글 별로 작성 시간, 수정 시간, 삭제시간이 기록되어 있으며 게시글 및 리뷰 삭제시 게시글의 삭제가 진행되는 것이 아니라 삭제 날짜만 기록되어 보관함.
   
-    
-    
-### 기술 요구 사항
-- 글 작성, 수정, 삭제
-- 글 좋아요
-- 글 목록
-- 들어온 사용자가 임대인인지, 임차인인지, 공인중개사인지는 HTTP Header 중 Authentication 의 Value Prefix 에 따라 사용해 구분 할 수 있어야 합니다. 만약 Authentication 값이 없다면 외부 사용자로 취급합니다.
-- 별도의 회원 테이블을 만들어 사용합니다.
-- 글에 `좋아요`는 한 계정이 한 글에 한 번만 할 수 있습니다.
-- 어떤 사용자가 어떤 글에 좋아요 했는지 히스토리를 확인할 수 있어야 합니다.
-- 각 글은 작성시간, 마지막 수정시간, 삭제시간에 대한 히스토리를 확인할 수 있어야 합니다.
+### 그 외 기능
+* 추가적으로 게시글 조회시 페이지 번호와 사이즈를 입력하여 한화면에 출력할 수 있는 게시글을 정할 수 있으며, 게시글 제목을 통해 게시글 검색 또한 가능합니다.
