@@ -3,13 +3,13 @@
 
 ## 목차
 
-* 개발환경
-* 외부 라이브러리
-* 빌드 및 실행하기
-* API 명세서 및 ERD 구조
-* 기능 요구사항
-* 기술 요구
-* 그외 기능
+* [개발환경](#개발환경)
+* [외부 라이브러리](#외부라이브러리)
+* [실행하기](#실행하기)
+* [테스트 진행](#테스트진행)
+* [API명세서 및 ERD](#API명세서-및-ERD)
+* [기능 및 기술 요구사항](#기능-및-기술-요구사항)
+* [그 외 기능](#그-외-기능)
 
 
 ### 개발환경
@@ -22,7 +22,7 @@
   * lombok
   * MySQL 8.0
   
-### 외부 라이브러리
+### 외부라이브러리
 
 ```
 Java-jwt  3.10.2:
@@ -55,11 +55,13 @@ spring.data.jpa.repositories.enabled=true
 spring.mvc.pathmatch.matching-strategy=ant-path-matcher
 ```
 
-### 테스트 진행
+### 테스트진행
 http://localhost:8080/swagger-ui.html#/  
 Swagger 접속 후 컨트롤러 별로 실행 후 확인 가능.
+  
+  
+### API명세서 및 ERD
 
-### API 명세서 및 ERD 구조
 <details>
 <summary>API 명세서</summary>
 <div>
@@ -98,7 +100,7 @@ Swagger 접속 후 컨트롤러 별로 실행 후 확인 가능.
    
    
    
-### 기능 요구 사항
+### 기능 및 기술 요구사항
 * 회원/ 비회원에 따라서 페이지에 접근할 수 있는 권한을 부여함.
   * 코드 작성 예시
     ```
