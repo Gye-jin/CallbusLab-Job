@@ -7,10 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
-
 import com.spring.zaritalk.config.jwt.CustomAuthenticationEntryPoint;
 import com.spring.zaritalk.config.jwt.JwtAuthenticationFilter;
 import com.spring.zaritalk.config.jwt.JwtAuthrizationFilter;

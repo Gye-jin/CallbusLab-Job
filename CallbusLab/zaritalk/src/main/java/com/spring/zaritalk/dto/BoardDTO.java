@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.spring.zaritalk.model.Board;
-import com.spring.zaritalk.model.User;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,15 +18,31 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class BoardDTO {
+	@ApiModelProperty(value = "게시글번호", required = true, hidden = false)
 	private Long boardNo;
+	
+	@ApiModelProperty(value = "게시글 제목", required = true)
 	private String boardTitle;
+	
+	@ApiModelProperty(value = "게시글 내용", required = true)
 	private String boardContent;
+	
+	@ApiModelProperty(required = false,hidden = true)
 	private LocalDateTime writtenDatetime;
+	
+	@ApiModelProperty(required = false,hidden = true)
 	private LocalDateTime modifiedDatetime;
+	
+	@ApiModelProperty(required = false,hidden = true)
 	private Long heartCnt;
 	
+	@ApiModelProperty(required = false,hidden = true)
 	private UserDTO user;
+	
+	@ApiModelProperty(required = false,hidden = true)
 	private List<CommentDTO> comments = new ArrayList<>();
+	
+	@ApiModelProperty(required = false,hidden = true)
 	private List<HeartDTO> hearts = new ArrayList<>();
 	
 			

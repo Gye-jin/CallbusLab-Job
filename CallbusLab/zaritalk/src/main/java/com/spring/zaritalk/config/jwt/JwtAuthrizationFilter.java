@@ -19,6 +19,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.spring.zaritalk.common.ErrorCode;
 import com.spring.zaritalk.config.JwtProperties;
 import com.spring.zaritalk.config.auth.LoginUser;
 import com.spring.zaritalk.model.User;
@@ -49,8 +50,8 @@ public class JwtAuthrizationFilter extends BasicAuthenticationFilter{
 
 		// 헤더가 있는지 확인
 		if (jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
-			chain.doFilter(request, response);
-			return;
+			request.setAttribute(JwtProperties.HEADER_STRING, ErrorCode.UNAUTHORIZED.toString());
+
 		} else {
 
 			try {
@@ -73,9 +74,9 @@ public class JwtAuthrizationFilter extends BasicAuthenticationFilter{
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			} catch (TokenExpiredException e) {
-				request.setAttribute(JwtProperties.HEADER_STRING, "토큰이 만료되었습니다.");
+				request.setAttribute(JwtProperties.HEADER_STRING, ErrorCode.FORBIDDEN.toString());
 			} catch (JWTVerificationException e) {
-				request.setAttribute(JwtProperties.HEADER_STRING, "유효하지 않은 토큰입니다.");
+				request.setAttribute(JwtProperties.HEADER_STRING, ErrorCode.BAD_REQUEST.toString());
 			}
 
 		}

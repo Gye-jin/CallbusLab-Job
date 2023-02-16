@@ -33,6 +33,9 @@ public enum ErrorCode {
 	 * 405 METHOD_NOT_ALLOWED: 허용되지 않은 Request Method 호출
 	 */
 	METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "허용되지 않은 메서드입니다."),
+	
+	
+	CONFILICT(HttpStatus.CONFLICT,"중복된 값입니다."),
 
 	/*
 	 * 500 INTERNAL_SERVER_ERROR: 내부 서버 오류

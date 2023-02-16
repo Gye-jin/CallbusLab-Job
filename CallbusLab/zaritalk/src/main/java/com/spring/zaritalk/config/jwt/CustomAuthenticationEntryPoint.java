@@ -4,6 +4,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+import com.spring.zaritalk.common.ErrorCode;
 import com.spring.zaritalk.config.JwtProperties;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,16 +19,22 @@ import java.io.IOException;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        String exception = (String) request.getAttribute(JwtProperties.HEADER_STRING);
+    	System.out.println(authException+"exception");
+    	String exception = (String) request.getAttribute(JwtProperties.HEADER_STRING);
         String errorCode;
+        
+        if(exception.equals(ErrorCode.FORBIDDEN.toString())) {
+        	errorCode = ErrorCode.FORBIDDEN.getStatus().toString();
+        	setResponse (response, errorCode);
+        }
 
-        if(exception.equals("토큰이 만료되었습니다.")) {
-            errorCode = "토큰이 만료되었습니다.";
+        if(exception.equals(ErrorCode.UNAUTHORIZED.toString())) {
+            errorCode = ErrorCode.UNAUTHORIZED.getStatus().toString();
             setResponse (response, errorCode);
         }
 
-        if(exception.equals("유효하지 않은 토큰입니다.")) {
-            errorCode = "유효하지 않은 토큰입니다.";
+        if(exception.equals(ErrorCode.BAD_REQUEST.toString())) {
+            errorCode = ErrorCode.BAD_REQUEST.getStatus().toString();
             setResponse(response, errorCode);
         }
     }
@@ -38,7 +45,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         log.error("토큰에러");
         response.getWriter().println(JwtProperties.HEADER_STRING + " : " + errorCode);
 
-
+ 
     }
 }
 

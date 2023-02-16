@@ -2,6 +2,7 @@ package com.spring.zaritalk.dto;
 
 import com.spring.zaritalk.model.Heart;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +13,11 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class HeartDTO {
+	@ApiModelProperty(required = false,hidden = true)
 	private Long heartNo;
+	@ApiModelProperty(required = true,hidden = false)
 	private boolean doHeart;
+	@ApiModelProperty(required = false,hidden = true)
 	private String userId;
 	
 	

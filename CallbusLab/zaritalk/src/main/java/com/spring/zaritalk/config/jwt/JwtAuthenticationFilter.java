@@ -40,7 +40,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		System.out.println("로그인 시도");
 
-		// 1. username,password 받아서
 		try {
 
 			ObjectMapper om = new ObjectMapper();
@@ -48,19 +47,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			user = om.readValue(request.getInputStream(), User.class);
 
 			log.info("{}가 로그인 시도함.", user.getAccountId());
-			UsernamePasswordAuthenticationToken tuthenticationToken = new UsernamePasswordAuthenticationToken(user.getAccountId(), user.getUserPw());
-			
+			UsernamePasswordAuthenticationToken tuthenticationToken = new UsernamePasswordAuthenticationToken(
+					user.getAccountId(), user.getUserPw());
 			Authentication authentication = authenticationManager.authenticate(tuthenticationToken);
 			// authentication 객체가 session 영역에 저장됨 => 로그인이 되었다는 뜻임.
 			LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+
 			log.info("{}가 로그인 완료함.", loginUser.getUsername());
 			return authentication;
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		;
+		};
 
 		return null;
 	}

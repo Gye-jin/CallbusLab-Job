@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import com.spring.zaritalk.common.UserAccount;
 import com.spring.zaritalk.model.User;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,17 +19,24 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 
+
 public class UserDTO {
+	@ApiModelProperty(required = false,hidden = true)
 	private long userNo;
-	private String userPw;
-	private	String nickName;
-	private String accountId;
 	
+	@ApiModelProperty(value = "비밀번호",required = true,hidden = false)
+	private String userPw;
+	@ApiModelProperty(value = "닉네임",required = true,hidden = false)
+	private	String nickName;
+	@ApiModelProperty(value = "아이디",required = true,hidden = false)
+	private String accountId;
+	@ApiModelProperty(value = "계정 타입",required = true,hidden = false)
 	@Enumerated(EnumType.ORDINAL)
 	private UserAccount accountType;
 	
+	@ApiModelProperty(required = false,hidden = true)
 	private LocalDateTime createTime;
-	
+	@ApiModelProperty(required = false,hidden = true)
 	private boolean quit;
 	
 //	private List<BoardDTO> boards = new ArrayList<BoardDTO>();

@@ -1,13 +1,16 @@
 package com.spring.zaritalk.service;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.http.ResponseEntity;
+
 import com.spring.zaritalk.dto.CommentDTO;
-import com.spring.zaritalk.model.User;
 
 public interface CommentService {
 	
-	public void CommentWrite(Long boardNo,CommentDTO commentDTO, User loginUser);
+	public ResponseEntity<?> CommentWrite(Long boardNo,CommentDTO commentDTO, HttpSession session);
 		
-	public int updateComment(Long boardNo,CommentDTO commentDTO, User loginUser);
+	public ResponseEntity<?> updateComment(Long boardNo,CommentDTO commentDTO, HttpSession session);
 	
-	public int deleteComment(Long boardNo,CommentDTO commentDTO, User loginUser);
+	public ResponseEntity<?> deleteComment(Long boardNo,CommentDTO commentDTO, HttpSession session);
 }

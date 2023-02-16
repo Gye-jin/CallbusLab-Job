@@ -2,12 +2,16 @@ package com.spring.zaritalk.service;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.spring.zaritalk.common.ErrorCode;
+import com.spring.zaritalk.common.ErrorResponse;
 import com.spring.zaritalk.common.exception.ApiControllerException;
 import com.spring.zaritalk.dto.CommentDTO;
 import com.spring.zaritalk.model.Board;
@@ -34,9 +38,9 @@ public class CommentServiceImpl implements CommentService{
 	
 
 	@Override
-	public void CommentWrite(Long boardNo,CommentDTO commentDTO, User loginUser) {
-			
-		System.out.println(commentDTO.getBoardNo());
+	public ResponseEntity<?> CommentWrite(Long boardNo,CommentDTO commentDTO, HttpSession session) {
+		User loginUser = (User) session.getAttribute("loginUser");
+		
 		Comment comment = Comment.DTOToEntity(commentDTO);
 		Optional<Board> boardEntity = boardRepository.findByBoardNoAndDeletedDatetimeIsNull(boardNo);
 		if (!boardEntity.isPresent()) {
@@ -48,47 +52,56 @@ public class CommentServiceImpl implements CommentService{
 		comment.updateBoard(board);
 		comment.updateUser(loginUser);
 		commentRepository.save(comment);
+		
+		return new ResponseEntity<String>("ok", HttpStatus.CREATED);
 	}
 		
 	@Override
-	public int updateComment(Long boardNo,CommentDTO commentDTO, User loginUser) {
+	public ResponseEntity<?> updateComment(Long boardNo,CommentDTO commentDTO, HttpSession session) {
 		
-		Optional<Comment> commentEntity = commentRepository.findByCommentNoAndDeletedDatetimeIsNull(commentDTO.getCommentNo());
+		User loginUser = (User) session.getAttribute("loginUser");
+
+		Optional<Comment> commentEntity = commentRepository
+				.findByCommentNoAndDeletedDatetimeIsNull(commentDTO.getCommentNo());
 		if (!commentEntity.isPresent()) {
 			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
 			commentEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
 		}
 		Comment comment = commentEntity.orElseGet(Comment::new);
-		
-		if(comment.getBoard().getDeletedDatetime() != null) {
-			return -1;
-		}
-		else if(comment.getUser().getAccountId().equals(loginUser.getAccountId())) {
+
+		if (comment.getUser().getAccountId().equals(loginUser.getAccountId())) {
 			comment.updateContent(commentDTO.getCommentContent());
-			return 1;
-		}else {
-			return 0;
+			log.info("{}가{}게시글의 {}번 댓글을 수정함.", loginUser.getAccountId(), boardNo, commentDTO.getCommentNo());
+			return new ResponseEntity<String>("ok", HttpStatus.OK);
+		} else {
+			log.error("접근에 제한 됨");
+			return new ResponseEntity<ErrorResponse>(new ErrorResponse(ErrorCode.FORBIDDEN), HttpStatus.FORBIDDEN);
 		}
 	
 	}
 	
 	@Override
-	public int deleteComment(Long boardNo,CommentDTO commentDTO, User loginUser) {
-		Optional<Comment> commentEntity = commentRepository.findByCommentNoAndDeletedDatetimeIsNull(commentDTO.getCommentNo());
-		System.out.println(commentEntity.orElseGet(Comment::new).getCommentContent());
+	public ResponseEntity<?> deleteComment(Long boardNo,CommentDTO commentDTO, HttpSession session) {
+
+		User loginUser = (User) session.getAttribute("loginUser");
+		Optional<Comment> commentEntity = commentRepository
+				.findByCommentNoAndDeletedDatetimeIsNull(commentDTO.getCommentNo());
+		
 		if (!commentEntity.isPresent()) {
 			log.error("ApiControllerException: {}", ErrorCode.POSTS_NOT_FOUND);
 			commentEntity.orElseThrow(() -> new ApiControllerException(ErrorCode.POSTS_NOT_FOUND));
 		}
 		Comment comment = commentEntity.orElseGet(Comment::new);
-		
-		
-		if(comment.getUser().getAccountId().equals(loginUser.getAccountId())) {
+
+		if (comment.getUser().getAccountId().equals(loginUser.getAccountId())) {
 			comment.deleteComment();
-			return 1;
-		}else {
-			return 0;
+			return new ResponseEntity<String>("ok", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<ErrorResponse>(new ErrorResponse(ErrorCode.FORBIDDEN), HttpStatus.FORBIDDEN);
 		}
+		
+		
+		
 		
 	}
 	

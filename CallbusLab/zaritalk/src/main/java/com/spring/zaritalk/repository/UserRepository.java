@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	public Optional<User> findByAccountIdAndQuitIsFalse(String accountId);
 	
+	public boolean existsByAccountId(String accountId);
+	
 }
