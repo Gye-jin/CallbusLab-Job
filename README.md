@@ -39,8 +39,8 @@ Swagger를 이용해서 기능을 API 기능들을 테스트 할 수 있는 UI�
 로컬 환경에서 KakaoMemberShipApplication 실행 가능
 java -jar zaritalk-0.0.1-SNAPSHOT.jar 명령어로 빌드된 jar 파일 실행 가능
 ```
+* application.properties 작성 내역
 ```
-application.properties 작성 내역
 spring.datasource.url=jdbc:mysql://localhost:3306/{database명}?serverTimezone=Asia/Seoul
 spring.datasource.username={접속아이디}
 spring.datasource.password={비밀번호}
