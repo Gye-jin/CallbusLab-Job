@@ -39,8 +39,24 @@ Swagger를 이용해서 기능을 API 기능들을 테스트 할 수 있는 UI�
 로컬 환경에서 KakaoMemberShipApplication 실행 가능
 java -jar zaritalk-0.0.1-SNAPSHOT.jar 명령어로 빌드된 jar 파일 실행 가능
 ```
+```
+application.properties 작성 내역
+spring.datasource.url=jdbc:mysql://localhost:3306/{database명}?serverTimezone=Asia/Seoul
+spring.datasource.username={접속아이디}
+spring.datasource.password={비밀번호}
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+# JPA
+spring.jpa.hibernate.ddl-auto=update	# 테이블 생성 후 none으로 
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.show-sql=true
+spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+spring.data.jpa.repositories.enabled=true
+
+spring.mvc.pathmatch.matching-strategy=ant-path-matcher
+```
+
 ### 테스트 진행
-http://localhost:8080/swagger-ui.html#/
+http://localhost:8080/swagger-ui.html#/  
 Swagger 접속 후 컨트롤러 별로 실행 후 확인 가능.
 
 ### API 명세서 및 ERD 구조
